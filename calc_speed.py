@@ -1,15 +1,18 @@
+# Импорт модуля tkinter для создания графического интерфейса пользователя (GUI)
 import tkinter as tk
 
-
+# Определение функции для конвертации скорости между различными единицами измерения
 def convert_speed():
-    """
-    Функция для конвертации скорости.
-    """
+    
     try:
+        # Получение значения из текстового поля ввода и преобразование его в число с плавающей точкой
         value = float(entry.get())
+        # Получение выбранной единицы измерения из выпадающего списка "от"
         from_unit = from_var.get()
+        # Получение выбранной единицы измерения из выпадающего списка "до"
         to_unit = to_var.get()
-
+        
+        # Конвертация скорости из км/ч в другие единицы измерения
         if from_unit == to_unit:
             result = value
         elif from_unit == "km/h":
@@ -79,30 +82,34 @@ def convert_speed():
             elif to_unit == "knots":
                 result = value * 661.471
         else:
-            result = "Ошибка"
-
+            result = "Ошибка" # Возвращаем ошибку, если не поддерживается указанная единица измерения
+            
+        # Очистка текстового поля ввода перед выводом результата
         entry.delete(0, tk.END)
         entry.insert(tk.END, str(result))
     except ValueError:
+         # Обработка исключений, связанных с неверным форматом вводимого значения
         entry.delete(0, tk.END)
         entry.insert(tk.END, "Ошибка")
-
+        
+# Создание основного окна приложения
 root = tk.Tk()
 root.title("Калькулятор скорости")
+
+# Создание текстового поля для ввода значений
 entry = tk.Entry(root, width=30, borderwidth=5)
 entry.grid(row=0, column=0, columnspan=4)
 def on_click(event):
-  """
-  Обработчик нажатия на кнопку.
-  """
-  text = event.widget.cget("text")
+
+  text = event.widget.cget("text") # Получение текста кнопки, по которой был совершен клик
   if text == "=":
     convert_speed()  # Вызываем конвертацию при нажатии "="
   elif text == "CE":
     entry.delete(0, tk.END)
   else:
     entry.insert(tk.END, text)
-
+      
+# Создание меток и выпадающих списков для выбора единиц измерения
 from_label = tk.Label(root, text="Из:")
 from_label.grid(row=5, column=0)
 from_var = tk.StringVar(root)
@@ -131,10 +138,11 @@ col = 0
 for button_text in buttons:
     button = tk.Button(root, text=button_text, padx=20, pady=10)
     button.grid(row=row, column=col, padx=5, pady=5)
-    button.bind("<Button-1>", on_click)  # Привязываем обработчик событий
+    button.bind("<Button-1>", on_click)  # Привязываем обработчик событий к каждой кнопке
     col += 1
     if col > 3:
         col = 0
         row += 1
-
+        
+# Запуск главного цикла обработки событий
 root.mainloop()
